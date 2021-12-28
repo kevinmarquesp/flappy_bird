@@ -5,7 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
     <link rel="stylesheet" href="./Style/Globals.css" media="all">
+    <link rel="stylesheet" href="./Style/Menu.css" media="all">
     <link rel="stylesheet" href="./Style/Profile.css" media="all">
 
     <title>
@@ -15,6 +18,7 @@
   <body>
 
 
+    <!-- Imagem para fazer o recorte da janela -->
     <svg>
       <defs>
         <clipPath id="menu-svg_path">
@@ -27,16 +31,65 @@
 
     <main>
 
-      <div id="menu_button">
+      <!-- Botão da janela de perfil -->
+      <div id="menu_button" class="active">
         <span class="menu-top_bar"></span>
         <span class="menu-middle_bar"></span>
         <span class="menu-bottom_bar"></span>
       </div>
 
-      <div id="profile_info">
+      <div id="profile_info" class="active">
+        <header>
+          <img
+            src="https://avatars.githubusercontent.com/u/71402116?v=4"
+            alt="kevinmarquesp github profile photo"
+            class="profile-image"
+          >
+          <section>
+            <h1>
+              Flappy Bird, by
+            </h1>
+            <span>
+              Kevin Marques
+            </span>
+          </section>
+        </header>
 
+        <section>
+          <button class="btn-link">
+            <a href="https://github.com/kevinmarquesp" target="_blank">
+              <i class="ri-github-fill icon"></i>
+              <span>
+                My GitHub profile
+              </span>
+            </a>
+          </button>
+
+          <button class="btn-link">
+            <a href="https://github.com/kevinmarquesp/flappy_bird" target="_blank">
+              <i class="ri-code-s-slash-line icon"></i>
+              <span>
+                See the game source code
+              </span>
+            </a>
+          </button>
+
+          <button id="easter_egg" class="btn-link hide">
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
+              <i class="ri-question-mark icon"></i>
+              <span>
+                dQw4w9WgXcQ
+              </span>
+            </a>
+          </button>
+        </section>
+
+        <button class="easter-egg-btn">
+          <i class="ri-question-mark icon"></i>
+        </button>
       </div>
 
+      <!-- API cnavas para desenhar a janela do joginho :3 -->
       <!-- <canva -->
       <!--   id="root" -->
       <!--   width="320" -->

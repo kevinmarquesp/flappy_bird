@@ -14,6 +14,8 @@
   --profile-bg: #434C5E;
   --profile-alt: #3B4252;
   --white-1: #D8DEE9;
+  --blue-1: #81A1C1;
+  font-family: sans-serif;
 }
 
 
@@ -43,6 +45,14 @@ svg {
   position: absolute;
 }
 
+a {
+  text-decoration: none;
+}
+
+.hide {
+  display: none;
+}
+
 
 main {
   width: calc(var(--canvas-w) + 10px);
@@ -56,3 +66,8 @@ main {
 }
 
 
+@keyframes spawn {
+  from {
+    filter: opacity(0);
+  }
+}

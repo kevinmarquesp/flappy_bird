@@ -1,98 +1,115 @@
 #profile_info {
-  position: absolute;
-  right: calc(30px - 90%);
-
-  width: calc(100% - 28px);
-  height: 100%;
-
-  clip-path: url("#menu-svg_path");
-
-  background-color: var(--profile-bg);
-  transition: .5s ease-in-out;
+  padding: 2rem 1rem 1rem 2.5rem;
 }
 
 
-/* --- Botão para abrir o menu --- */
-
-#menu_button {
-  background-color: var(--white-1);
-
-  width: 22.5px;
-  height: 22.5px;
-
-  border-radius: 50%;
-  position: relative;
-
-  position: absolute;
-  z-index: 1;
-
-  bottom: 36px;
-  right: 17px;
-
-  box-shadow: 0 0 5px rgba(0 0 0 / .3);
-  transition: .5s ease-in-out;
-}
-
-
-.menu-middle_bar, .menu-top_bar, .menu-bottom_bar {
-  content: "";
-  display: block;
-
-  background-color: var(--profile-alt);
+header {
+  background-color: var(--bg-color);
   border-radius: 10px;
 
+  padding: .5rem;
+  color: var(--white-1);
+
+  display: flex;
+  grid-gap: 1rem;
+
+  align-items: center;
+  justify-content: left;
+}
+
+
+.profile-image {
+  width: 80px;
+  height: 80px;
+
+  border-radius: 10px;
+}
+
+
+header h1 {
+  font-size: 10px;
+  font-weight: normal;
+  font-style: italic;
+}
+
+header span {
+  font-weight: bold;
+}
+
+
+button.btn-link, button.btn-link a {
+  transition: .4s ease;
+}
+
+button.btn-link {
+  background-color: transparent;
+  border: 1px solid var(--bg-color);
+
+  width: 100%;
+  height: 3rem;
+
+  margin-top: 1rem;
+  border-radius: 7px;
+}
+
+
+button.btn-link a {
+  color: var(--white-1);
+  display: block;
+  font-size: .6rem;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+
+button.btn-link .icon {
+  font-size: 1.2rem;
+  width: 3rem;
+}
+
+
+button.btn-link:hover {
+  border-color: var(--blue-1);
+}
+
+button.btn-link:hover a {
+  color: var(--blue-1);
+}
+
+
+#easter_egg {
+  animation: spawn .4s ease backwards;
+}
+
+
+.easter-egg-btn {
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+
+  height: 1rem;
+  width: 1rem;
+
+  color: var(--profile-bg);
+  cursor: pointer;
+
   position: absolute;
+  bottom: 1rem;
+  right: 1rem;
 
-  top: 50%;
-  left: 50%;
-  
-  height: 2px;
-  width: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  transition: .3s ease-in-out;
+  font-size: .7rem;
+  transition: .5s;
 }
 
-
-.menu-middle_bar {
-  transform: translate(-50%, -50%);
+.easter-egg-btn:hover {
+  background-color: var(--bg-color);
 }
-
-
-.menu-top_bar {
-  transform: translate(-50%, calc(-50% - 3px));
-}
-
-
-.menu-bottom_bar {
-  transform: translate(-50%, calc(-50% + 3px));
-}
-
-
-/* Move o menu para a direita quando estiver ativo */
-#profile_info.active {
-  right: 0;
-}
-
-
-/* Desenho o X se o menu estiver ativo */
-#menu_button.active {
-  right: calc(var(--canvas-w) - 36px);
-}
-
-#menu_button.active .menu-middle_bar {
-  width: 0px;
-  background: none;
-}
-
-#menu_button.active .menu-top_bar {
-  transform:
-    translate(-50%, -50%)
-    rotate(45deg);
-}
-
-#menu_button.active .menu-bottom_bar {
-  transform:
-    translate(-50%, -50%)
-    rotate(-45deg);
-}
-
