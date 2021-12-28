@@ -2,9 +2,10 @@
   position: absolute;
   right: calc(30px - 90%);
 
-  width: calc(100% - 30px);
+  width: calc(100% - 28px);
   height: 100%;
 
+  clip-path: url("#menu-svg_path");
 
   background-color: var(--profile-bg);
   transition: .5s ease-in-out;
@@ -13,25 +14,23 @@
 
 /* --- Botão para abrir o menu --- */
 
-nav {
-  position: absolute;
-
-  left: 0;
-  bottom: 30px;
-
-  transform: translateX(-50%);
-  background-clip: revert;
-}
-
-
 #menu_button {
   background-color: var(--white-1);
 
-  width: 20px;
-  height: 20px;
+  width: 22.5px;
+  height: 22.5px;
 
   border-radius: 50%;
   position: relative;
+
+  position: absolute;
+  z-index: 1;
+
+  bottom: 36px;
+  right: 17px;
+
+  box-shadow: 0 0 5px rgba(0 0 0 / .3);
+  transition: .5s ease-in-out;
 }
 
 
@@ -76,6 +75,10 @@ nav {
 
 
 /* Desenho o X se o menu estiver ativo */
+#menu_button.active {
+  right: calc(var(--canvas-w) - 36px);
+}
+
 #menu_button.active .menu-middle_bar {
   width: 0px;
   background: none;

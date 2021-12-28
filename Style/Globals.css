@@ -39,6 +39,11 @@ body::before {
 }
 
 
+svg {
+  position: absolute;
+}
+
+
 main {
   width: calc(var(--canvas-w) + 10px);
   height: var(--canvas-h);
