@@ -1,0 +1,53 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+:root {
+  --canvas-w: 320px;
+  --canvas-h: 480px;
+
+  /* Paleta de cores NORD */
+  --bg-color: #2E3440;
+  --profile-bg: #434C5E;
+  --profile-alt: #3B4252;
+  --white-1: #D8DEE9;
+}
+
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body::before {
+  content: "";
+
+  width: 100vw;
+  height: 100px;
+
+  position: absolute;
+  bottom: 100%;
+
+  box-shadow: 0 10px 20px rgba(0 0 0 / .5);
+}
+
+
+main {
+  width: calc(var(--canvas-w) + 10px);
+  height: var(--canvas-h);
+  border-radius: 7px;
+
+  position: relative;
+  box-shadow: 0 0 20px rgba(0 0 0 / .5);
+
+  overflow-x: hidden;
+}
+
+

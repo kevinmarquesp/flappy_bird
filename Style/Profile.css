@@ -1,0 +1,95 @@
+#profile_info {
+  position: absolute;
+  right: calc(30px - 90%);
+
+  width: calc(100% - 30px);
+  height: 100%;
+
+
+  background-color: var(--profile-bg);
+  transition: .5s ease-in-out;
+}
+
+
+/* --- Botão para abrir o menu --- */
+
+nav {
+  position: absolute;
+
+  left: 0;
+  bottom: 30px;
+
+  transform: translateX(-50%);
+  background-clip: revert;
+}
+
+
+#menu_button {
+  background-color: var(--white-1);
+
+  width: 20px;
+  height: 20px;
+
+  border-radius: 50%;
+  position: relative;
+}
+
+
+.menu-middle_bar, .menu-top_bar, .menu-bottom_bar {
+  content: "";
+  display: block;
+
+  background-color: var(--profile-alt);
+  border-radius: 10px;
+
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+  
+  height: 2px;
+  width: 10px;
+
+  transition: .3s ease-in-out;
+}
+
+
+.menu-middle_bar {
+  transform: translate(-50%, -50%);
+}
+
+
+.menu-top_bar {
+  transform: translate(-50%, calc(-50% - 3px));
+}
+
+
+.menu-bottom_bar {
+  transform: translate(-50%, calc(-50% + 3px));
+}
+
+
+/* Move o menu para a direita quando estiver ativo */
+#profile_info.active {
+  right: 0;
+}
+
+
+/* Desenho o X se o menu estiver ativo */
+#menu_button.active .menu-middle_bar {
+  width: 0px;
+  background: none;
+}
+
+#menu_button.active .menu-top_bar {
+  transform:
+    translate(-50%, -50%)
+    rotate(45deg);
+}
+
+#menu_button.active .menu-bottom_bar {
+  transform:
+    translate(-50%, -50%)
+    rotate(-45deg);
+}
+
