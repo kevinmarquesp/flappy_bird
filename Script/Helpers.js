@@ -5,30 +5,51 @@ const root = document.querySelector("#root");
 const ctx = root.getContext("2d");
 
 
+/*
+ *  FLAPPY BIRD: ???
+ */
+
 class FlappyBird {
   constructor() {
     this._sprite_xy = [0, 0];
     this._size = [33, 24];
-    this._canvas_xy = [10, 50];
+    this._root_xy = [10, 50];
+
+    this._grav = .2;
+    this._speed = 0;
   }
+
 
   draw() {
     ctx.drawImage(
       sprites,
       ...this._sprite_xy,
       ...this._size,
-      ...this._canvas_xy,
+      ...this._root_xy,
       ...this._size
     );
   }
+
+
+  update() {
+    // Soma a constante gravitacional com a velocidade (faz a queda acelerar)
+    if(this._root_xy[1] < root.height) {
+      this._speed += this._grav;
+      this._root_xy[1] += this._speed;
+    }
+  }
 }
 
+
+/*
+ *  BACKGROUND SPRITE: ???
+ */
 
 class Background {
   constructor() {
     this._sprite_xy = [390, 0];
     this._size = [275, 204];
-    this._canvas_xy = [
+    this._root_xy = [
       0, root.height - this._size[1]
     ];
   }
@@ -44,7 +65,7 @@ class Background {
       sprites,
       ...this._sprite_xy,
       ...this._size,
-      ...this._canvas_xy,
+      ...this._root_xy,
       ...this._size
     );
 
@@ -53,18 +74,22 @@ class Background {
       sprites,
       ...this._sprite_xy,
       ...this._size,
-      this._canvas_xy[0] + this._size[0], this._canvas_xy[1],
+      this._root_xy[0] + this._size[0], this._root_xy[1],
       ...this._size
     );
   }
 }
 
 
+/*
+ *  FLOOR SPRITE: ???
+ */
+
 class Floor {
   constructor() {
     this._sprite_xy = [0, 610];
     this._size = [224, 112];
-    this._canvas_xy = [
+    this._root_xy = [
       0, root.height - this._size[1]
     ];
   }
@@ -74,7 +99,7 @@ class Floor {
       sprites,
       ...this._sprite_xy,
       ...this._size,
-      ...this._canvas_xy,
+      ...this._root_xy,
       ...this._size
     );
 
@@ -83,13 +108,38 @@ class Floor {
       sprites,
       ...this._sprite_xy,
       ...this._size,
-      this._canvas_xy[0] + this._size[0], this._canvas_xy[1],
+      this._root_xy[0] + this._size[0], this._root_xy[1],
       ...this._size
     );
   }
 }
 
 
-const flappy_bird = new FlappyBird();
-const background = new Background();
-const floor = new Floor();
+/*
+ *  GETREADY SPRITE: ???
+ */
+
+class GetReady {
+  constructor() {
+    this._sprite_xy = [134, 0];
+    this._size = [174, 152];
+
+    // NOTA: -10 por causa do menu lateral
+    this._root_xy = [
+      root.width / 2 - this._size[0] / 2 - 10,
+      50 
+    ];
+  }
+
+
+  draw() {
+    ctx.drawImage(
+      sprites,
+      ...this._sprite_xy,
+      ...this._size,
+      ...this._root_xy,
+      ...this._size
+    );
+  }
+}
+
