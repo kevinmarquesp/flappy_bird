@@ -30,15 +30,14 @@
     </svg>
 
     <main>
-
       <!-- Botão da janela de perfil -->
-      <div id="menu_button" class="active">
+      <div id="menu_button">
         <span class="menu-top_bar"></span>
         <span class="menu-middle_bar"></span>
         <span class="menu-bottom_bar"></span>
       </div>
 
-      <div id="profile_info" class="active">
+      <div id="profile_info">
         <header>
           <img
             src="https://avatars.githubusercontent.com/u/71402116?v=4"
@@ -90,16 +89,16 @@
       </div>
 
       <!-- API cnavas para desenhar a janela do joginho :3 -->
-      <!-- <canva -->
-      <!--   id="root" -->
-      <!--   width="320" -->
-      <!--   height="480" -->
-      <!-- ></canva> -->
-      <div style="width: 320px; height: 480px; background-color: white;"></div>
+      <canvas
+        id="root"
+        width="320"
+        height="480"
+      ></canvas>
     </main>
-
-
     
+
+    <script src="./Script/Helpers.js"></script>
+    <script src="./Script/main.js"></script>
 
     <script src="./Script/Profile.js"></script>
   </body>
