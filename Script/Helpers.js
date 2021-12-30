@@ -11,32 +11,45 @@ const ctx = root.getContext("2d");
 
 class FlappyBird {
   constructor() {
-    this._sprite_xy = [0, 0];
-    this._size = [33, 24];
-    this._root_xy = [10, 50];
+    // Array com as cordenadas dos sprites na tabela
+    this._states = [
+      [0, 0], [0, 26], [0, 52]
+    ];
+
+    this._sprite_xy = this._states[0];
+
+    // Necessário para o cálculo da colisão
+    this.size = [33, 24];
+    this.root_xy = [10, 50];
 
     this._grav = .2;
     this._speed = 0;
+    this._jump = 5.2;
   }
 
 
-  draw() {
+  render(sprite_state) {
+    this._sprite_xy = this._states[sprite_state];
+
     ctx.drawImage(
       sprites,
       ...this._sprite_xy,
-      ...this._size,
-      ...this._root_xy,
-      ...this._size
+      ...this.size,
+      ...this.root_xy,
+      ...this.size
     );
   }
 
 
+  // Soma a constante gravitacional com a velocidade (faz a queda acelerar)
   update() {
-    // Soma a constante gravitacional com a velocidade (faz a queda acelerar)
-    if(this._root_xy[1] < root.height) {
-      this._speed += this._grav;
-      this._root_xy[1] += this._speed;
-    }
+    this._speed += this._grav;
+    this.root_xy[1] += this._speed;
+  }
+
+
+  jump() {
+    this._speed = -this._jump;
   }
 }
 
@@ -54,7 +67,7 @@ class Background {
     ];
   }
 
-  draw() {
+  render() {
     // Desenha a cor de fundo para o `root`
     ctx.fillStyle = "#70c5ce";
     ctx.fillRect(
@@ -69,7 +82,7 @@ class Background {
       ...this._size
     );
 
-    // Isso cria uma cópia do backgroud e coloca do lado... DELETAR
+    // Isso cria uma cópia do backgroud e coloca do lado...
     ctx.drawImage(
       sprites,
       ...this._sprite_xy,
@@ -89,28 +102,44 @@ class Floor {
   constructor() {
     this._sprite_xy = [0, 610];
     this._size = [224, 112];
-    this._root_xy = [
+
+    // Necessário para o cálculo da colisão
+    this.root_xy = [
       0, root.height - this._size[1]
     ];
   }
 
-  draw() {
+
+  render() {
     ctx.drawImage(
       sprites,
       ...this._sprite_xy,
       ...this._size,
-      ...this._root_xy,
+      ...this.root_xy,
       ...this._size
     );
 
-    // Isso cria uma cópia do chão e coloca do lado... DELETAR
+    // Isso cria uma cópia do chão e coloca do lado...
     ctx.drawImage(
       sprites,
       ...this._sprite_xy,
       ...this._size,
-      this._root_xy[0] + this._size[0], this._root_xy[1],
+      this.root_xy[0] + this._size[0], this.root_xy[1],
       ...this._size
     );
+  }
+
+
+  // Faz o chão se mover para o lado
+  update() {
+    const floor_x = this.root_xy[0];
+    const reset_pos = -this._size[0] / 2;
+
+    if(floor_x <= reset_pos) {
+      this.root_xy[0] = 0;
+    }
+
+    this.root_xy[0]--;
   }
 }
 
@@ -132,7 +161,7 @@ class GetReady {
   }
 
 
-  draw() {
+  render() {
     ctx.drawImage(
       sprites,
       ...this._sprite_xy,
