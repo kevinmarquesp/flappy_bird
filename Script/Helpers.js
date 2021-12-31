@@ -1,5 +1,5 @@
 const sprites = new Image();
-sprites.src = "./sprites.png";
+sprites.src = "Assets/sprites.png";
 
 const root = document.querySelector("#root");
 const ctx = root.getContext("2d");
