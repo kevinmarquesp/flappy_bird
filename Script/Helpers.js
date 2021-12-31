@@ -22,9 +22,10 @@ class FlappyBird {
     this.size = [33, 24];
     this.root_xy = [10, 50];
 
-    this._grav = .2;
-    this._speed = 0;
-    this._jump = 5.2;
+    // Constantes para fazer o flappybird pular
+    this.grav = .2;
+    this.speed = 0;
+    this.jump = 4.2;
   }
 
 
@@ -38,18 +39,6 @@ class FlappyBird {
       ...this.root_xy,
       ...this.size
     );
-  }
-
-
-  // Soma a constante gravitacional com a velocidade (faz a queda acelerar)
-  update() {
-    this._speed += this._grav;
-    this.root_xy[1] += this._speed;
-  }
-
-
-  jump() {
-    this._speed = -this._jump;
   }
 }
 
@@ -66,6 +55,7 @@ class Background {
       0, root.height - this._size[1]
     ];
   }
+
 
   render() {
     // Desenha a cor de fundo para o `root`
@@ -119,7 +109,6 @@ class Floor {
       ...this._size
     );
 
-    // Isso cria uma cópia do chão e coloca do lado...
     ctx.drawImage(
       sprites,
       ...this._sprite_xy,
@@ -130,8 +119,8 @@ class Floor {
   }
 
 
-  // Faz o chão se mover para o lado
-  update() {
+  // Faz o chão se mover para o lado (não tem relação com o jogo)
+  local_update() {
     const floor_x = this.root_xy[0];
     const reset_pos = -this._size[0] / 2;
 
@@ -172,3 +161,47 @@ class GetReady {
   }
 }
 
+
+/*
+ *  PIPES: ???
+ */
+
+class Pipes {
+  constructor() {
+    this._floor_xy = [0, 169];
+    this._sky_xy = [52, 169];
+
+    this.size = [52, 400];
+    this.space = 95;
+  }
+
+
+  render(pipes_arr) {
+    pipes_arr.forEach(pair => {
+      const root_sky_xy = [
+        pair.x, pair.y
+      ];
+
+      const root_floor_xy = [
+        pair.x,
+        pair.y + this.size[1] + this.space 
+      ];
+
+      ctx.drawImage(
+        sprites,
+        ...this._sky_xy,
+        ...this.size,
+        ...root_sky_xy,
+        ...this.size
+      );
+
+      ctx.drawImage(
+        sprites,
+        ...this._floor_xy,
+        ...this.size,
+        ...root_floor_xy,
+        ...this.size
+      );
+    });
+  }
+}

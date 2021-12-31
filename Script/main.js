@@ -8,10 +8,22 @@ class Sections {
     this._get_ready = new GetReady();
     this._floor = new Floor();
     this._flappy_bird = new FlappyBird();
+    this._pipes = new Pipes();
 
-    this.current_section = null;
+    this.current_section;
+    this._frame = 1;
+
+    // Valores para a mudança do sprite do passarinho
     this._sprite_state = 0;
-    this._frame = 0;
+    this._sprite_next = 0;
+
+    this._flappy_bird_body = {
+      head: this._flappy_bird.root_xy[1],
+      nose: this._flappy_bird.root_xy[0] + this._flappy_bird.size[0],
+      foot: this._flappy_bird.root_xy[1] + this._flappy_bird.size[1]
+    };
+
+    this._pipes_arr = new Array();
   }
 
 
@@ -30,42 +42,126 @@ class Sections {
   }
 
 
-  // Atualiza o valor do frame atual, se for 15 ele muda o sprite do passarinho
-  _update_frame() {
-    const frame_rate = 15;
-    const change_sprite = () => {
-      if(this._sprite_state < 2) {
-        this._sprite_state++;
-      } else {
-        this._sprite_state = 0;
-      }
-    }
+  // ---------- [FUNÇÕES PRIVADAS DA CLASSE] ---------- //
 
-    if(this._frame >= frame_rate) {
-      change_sprite();
-      this._frame = 0;
-    }
+  // Conta cada frame e volta depois que passar de 500
+  update_frame() {
+    this._change_flappybird_sprite();
+    this._floor.local_update();
 
-    this._frame++;
+    if(this._frame >= 500) {
+      this._frame = 1;
+    } else {
+      this._frame++;
+    }
   }
 
 
+  // A cada 15 frames, o sprite do flappybird muda
+  _change_flappybird_sprite() {
+    const flappybird_framerate = 15;
+
+    if(this._frame % flappybird_framerate === 0) {
+      if(this._sprite_state == 0 || this._sprite_state === 2) {
+        this._sprite_state = 1;
+
+      } else {
+        this._sprite_state = this._sprite_next;
+        this._sprite_next = this._sprite_next === 0 ? 2 : 0;
+      }
+    }
+  }
+
+
+  // Faz um par de canos aparecer a cada 120 frames
+  _spawn_pipe() {
+    const pipes_framerate = 120;
+
+    if(this._frame % pipes_framerate === 0) {
+      this._pipes_arr.push({
+        x: root.width,
+        y: -150 * (Math.random() + 1)
+      });
+    }
+  }
+
+
+  // Faz o flappybird perder se ele encostar em um dos canos..
+  _pipe_colision(pair) {
+    const fb = this._flappy_bird_body;
+    const pipe_hitbox = {
+      side: pair.x,
+      top: pair.y + this._pipes.size[1],
+      bottom: pair.y + this._pipes.size[1] + this._pipes.space
+    };
+
+    if(fb.nose >= pipe_hitbox.side) {
+      if(fb.head <= pipe_hitbox.top) {
+        this._is_dead();
+      }
+
+      if(fb.foot >= pipe_hitbox.bottom) {
+        this._is_dead();
+      }
+    }
+  }
+
+
+  // Essa função é chamada quando o flappybird morrer...
+  _is_dead() {
+    sections.change_section(sections.list().get_ready);
+  }
+
+
+  // ---------- [FUNÇÕES PARA ATUALIZAR OS ELEMENTOS DA TELA] ---------- //
+  
+  // Faz o flappybird acelerar durante a queda
+  _flappy_bird_update() {
+    this._flappy_bird.speed += this._flappy_bird.grav;
+    this._flappy_bird.root_xy[1] += this._flappy_bird.speed;
+  }
+
+
+  // Verifica se o flappybird colidiu com o chão
+  _floor_update() {
+    const fb = this._flappy_bird_body;
+    const floor_ground = this._floor.root_xy[1];
+
+    if(fb.foot >= floor_ground) {
+      this._is_dead();
+      return;
+    }
+  }
+
+
+  // Limpa a quantidade de canos na tela e faz eles se moverem...
+  _pipes_update() {
+    this._pipes_arr.forEach(pair => {
+      if(pair.x + this._pipes.size[0] <= 0) {
+        this._pipes_arr.shift();
+      }
+
+      this._pipe_colision(pair);
+      pair.x -= 2.5
+    });
+  }
+
+
+  // ---------- [TELAS QUE O JOGO VAI CARREGAR] ---------- //
+
   _get_ready_section() {
+    this._pipes_arr = new Array(); // Limpa a lista de canos, e tiras eles da tela...
+
     return {
+      update: () => {
+        this._flappy_bird = new FlappyBird(); // Cria um passarinho novo a todo momento, o que faz ele ficar parado
+      },
+
       load: () => {
         this._background.render();
         this._floor.render();
         this._flappy_bird.render(this._sprite_state); // Desenha com o sprite atual
         this._get_ready.render();
-      },
-
-      update: () => {
-        this._flappy_bird = new FlappyBird();
-
-        this._floor.update();
-        this._flappy_bird.update();
-
-        this._update_frame();
       },
 
       click: () => {
@@ -77,34 +173,40 @@ class Sections {
 
   _game_section() {
     return {
+      update: () => {
+        // Atualiza os valores de cada parte do corpo do passarinho...
+        this._flappy_bird_body = {
+          head: this._flappy_bird.root_xy[1],
+          nose: this._flappy_bird.root_xy[0] + this._flappy_bird.size[0],
+          foot: this._flappy_bird.root_xy[1] + this._flappy_bird.size[1]
+        };
+
+        this._pipes_update(); // Faz os canos se mexerem
+        this._spawn_pipe();
+
+        this._floor_update();
+        this._flappy_bird_update();
+      },
+
       load: () => {
         this._background.render();
-        this._flappy_bird.render(this._sprite_state); // Desenha com o sprite atual
         this._floor.render();
+        this._flappy_bird.render(this._sprite_state); // Desenha com o sprite atual
+
+        this._pipes.render(this._pipes_arr); // Desenha todos os pares de canos
       },
 
-      update: () => {
-        const flappybird_y = this._flappy_bird.root_xy[1] + this._flappy_bird.size[1];
-        const floor_y = this._floor.root_xy[1];
-
-        // Colisão: se a base do sprite bater no topo do chão...
-        if(flappybird_y >= floor_y) {
-          this.change_section(this.list().get_ready);
-          return;
-        }
-
-        this._flappy_bird.update();
-        this._floor.update();
-
-        this._update_frame();
-      },
-
+      // Mudas as variáveis do flappybird, fazendo ele pular
       click: () => {
-        this._flappy_bird.jump();
+        this._flappy_bird.speed = -this._flappy_bird.jump;
       }
     };
   }
+
 }
+
+
+const sections = new Sections();
 
 
 // Qualquer tecla precionada faz o passarinho pular, junto com o click do mouse...
@@ -115,11 +217,12 @@ function loop() {
   sections.current_section.update();
   sections.current_section.load();
 
+  sections.update_frame();
+
   requestAnimationFrame(loop);
 }
 
 
-const sections = new Sections();
 sections.change_section(sections.list().get_ready);
 
 loop();
