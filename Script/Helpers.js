@@ -1,5 +1,5 @@
 const sprites = new Image();
-sprites.src = "../Assets/sprites.png";
+sprites.src = "/Assets/sprites.png";
 
 const root = document.querySelector("#root");
 const ctx = root.getContext("2d");
@@ -279,7 +279,7 @@ class GameOver {
 
 
   _render_medal(score) {
-    if(score >= 3) {
+    if(score >= 100) {
       ctx.drawImage(
         sprites,
         ...this._sprite_gold_medal,
@@ -288,7 +288,7 @@ class GameOver {
         ...this._medal_size
       );
 
-    } else if(score >= 2) {
+    } else if(score >= 66) {
       ctx.drawImage(
         sprites,
         ...this._sprite_silver_medal,
@@ -297,7 +297,7 @@ class GameOver {
         ...this._medal_size
       );
 
-    } else if(score >= 1) {
+    } else if(score >= 33) {
       ctx.drawImage(
         sprites,
         ...this._sprite_bronze_medal,
@@ -306,7 +306,7 @@ class GameOver {
         ...this._medal_size
       );
 
-    } else if(score < 1) {
+    } else if(score < 33) {
       ctx.drawImage(
         sprites,
         ...this._sprite_empty_medal,
