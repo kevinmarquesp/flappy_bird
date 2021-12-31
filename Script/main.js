@@ -9,6 +9,8 @@ class Sections {
     this._floor = new Floor();
     this._flappy_bird = new FlappyBird();
     this._pipes = new Pipes();
+    this._score_board = new Scoreboard();
+    this._game_over = new GameOver();
 
     this.current_section;
     this._frame = 1;
@@ -24,6 +26,8 @@ class Sections {
     };
 
     this._pipes_arr = new Array();
+    this._best_score = 0;
+    this._score;
   }
 
 
@@ -37,7 +41,8 @@ class Sections {
   list() {
     return {
       get_ready: this._get_ready_section(),
-      game: this._game_section()
+      game: this._game_section(),
+      game_over: this._game_over_section()
     };
   }
 
@@ -109,7 +114,7 @@ class Sections {
 
   // Essa função é chamada quando o flappybird morrer...
   _is_dead() {
-    sections.change_section(sections.list().get_ready);
+    sections.change_section(sections.list().game_over);
   }
 
 
@@ -147,6 +152,15 @@ class Sections {
   }
 
 
+  _score_board_update() {
+    const score_framerate = 120;
+
+    if(this._frame % score_framerate === 0) {
+      this._score++;
+    }
+  }
+
+
   // ---------- [TELAS QUE O JOGO VAI CARREGAR] ---------- //
 
   _get_ready_section() {
@@ -165,6 +179,8 @@ class Sections {
       },
 
       click: () => {
+        this._frame = 1; // Reseta os frames do jogo antes de começar
+        this._score = -1;
         this.change_section(this.list().game);
       }
     };
@@ -186,14 +202,19 @@ class Sections {
 
         this._floor_update();
         this._flappy_bird_update();
+
+        this._score_board_update(); // Conta um score
       },
 
       load: () => {
         this._background.render();
         this._floor.render();
-        this._flappy_bird.render(this._sprite_state); // Desenha com o sprite atual
 
+        this._flappy_bird.render(this._sprite_state); // Desenha com o sprite atual
         this._pipes.render(this._pipes_arr); // Desenha todos os pares de canos
+
+        // Inicialmente, ele começa como -1, mas escreve como 0...
+        this._score_board.render(this._score < 0 ? 0 : this._score);
       },
 
       // Mudas as variáveis do flappybird, fazendo ele pular
@@ -203,6 +224,28 @@ class Sections {
     };
   }
 
+
+  _game_over_section() {
+    return {
+      update: () => {
+        if(this._score > this._best_score) {
+          this._best_score = this._score;
+        }
+      },
+
+      load: () => {
+        // Mesma coisa, se for -1 represente como 0...
+        this._game_over.render(
+          this._score < 0 ? 0 : this._score,
+          this._best_score
+        );
+      },
+
+      click: () => {
+        sections.change_section(sections.list().get_ready);
+      }
+    }
+  }
 }
 
 

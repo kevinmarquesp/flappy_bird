@@ -205,3 +205,115 @@ class Pipes {
     });
   }
 }
+
+
+/*
+ *  SCOREBOARD: ???
+ */
+
+class Scoreboard {
+  constructor() {
+    this._root_xy = [10, 30]
+  }
+
+
+  render(str) {
+    ctx.font = "30px 'VT323'";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "left";
+
+    ctx.fillText(
+      `Score: ${str}`,
+      ...this._root_xy
+    )
+  }
+}
+
+
+class GameOver {
+  constructor() {
+    this._sprite_xy = [134, 152];
+    this._size = [226, 201];
+
+    // NOTA: -10 por causa do menu lateral
+    this._root_xy = [
+      root.width / 2 - this._size[0] / 2 - 10,
+      50 
+    ];
+
+    this._score_root_xy = [230, 145];
+    this._best_root_xy = [230, 185];
+
+    this._sprite_empty_medal = [0, 78];
+    this._sprite_bronze_medal = [48, 124];
+    this._sprite_silver_medal = [48, 78];
+    this._sprite_gold_medal = [0, 124];
+
+    this._medal_size = [44, 44];
+    this._medal_root_xy = [63, 137];
+  }
+
+
+  render(score, best) {
+    ctx.drawImage(
+      sprites,
+      ...this._sprite_xy,
+      ...this._size,
+      ...this._root_xy,
+      ...this._size
+    );
+
+    this._render_text(score, best);
+    this._render_medal(score);
+  }
+
+
+  _render_text(score, best) {
+    ctx.font = "20px 'VT323'";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "right";
+
+    ctx.fillText(score, ...this._score_root_xy);
+    ctx.fillText(best, ...this._best_root_xy);
+  }
+
+
+  _render_medal(score) {
+    if(score >= 3) {
+      ctx.drawImage(
+        sprites,
+        ...this._sprite_gold_medal,
+        ...this._medal_size,
+        ...this._medal_root_xy,
+        ...this._medal_size
+      );
+
+    } else if(score >= 2) {
+      ctx.drawImage(
+        sprites,
+        ...this._sprite_silver_medal,
+        ...this._medal_size,
+        ...this._medal_root_xy,
+        ...this._medal_size
+      );
+
+    } else if(score >= 1) {
+      ctx.drawImage(
+        sprites,
+        ...this._sprite_bronze_medal,
+        ...this._medal_size,
+        ...this._medal_root_xy,
+        ...this._medal_size
+      );
+
+    } else if(score < 1) {
+      ctx.drawImage(
+        sprites,
+        ...this._sprite_empty_medal,
+        ...this._medal_size,
+        ...this._medal_root_xy,
+        ...this._medal_size
+      );
+    }
+  }
+}
