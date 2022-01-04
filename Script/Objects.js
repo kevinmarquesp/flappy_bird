@@ -38,7 +38,6 @@ class Sprite {
 let paused = false;
 let fb_sprite_state = fb_next_state = 0;
 let frame = 0;
-let current_section;
 
 // Coordenadas de cada sprite diferente do flappybird
 const fb_states = [
@@ -70,64 +69,4 @@ const flappy_bird = new Sprite(
     [25, 50]
 );
 
-
-// [ Telas que o jogo vai carregar ]
-
-class GetReady {
-    constructor() {
-        this._getready = new Sprite(
-            [134, 0],
-            [174, 152],
-            [null, 50]
-        );
-
-        this._getready.root_xy[0] = 
-            (root.width / 2) - (this._getready.size_wh[0] / 2) - 10;
-    }
-
-
-    update() {
-        flappy_bird.mv_xy[1] = 0;
-    }
-
-
-    load() {
-        this._getready.render();
-        flappy_bird.render();
-        return;
-    }
-
-    click() {
-        current_section = game_section;
-    }
-}
-
-
-class Game {
-    constructor() {
-        this._gravity = .2;
-        this._jump = 4.2;
-    }
-
-
-    update() {
-        flappy_bird.mv_xy[1] += this._gravity;
-    }
-
-
-    load() {
-        flappy_bird.render();
-    }
-
-    click() {
-        console.log(this._gravity, this._jump);
-        flappy_bird.mv_xy[1] = -this._jump;
-    }
-}
-
-
-const getready_section = new GetReady();
-const game_section = new Game();
-
-current_section = getready_section;
 
