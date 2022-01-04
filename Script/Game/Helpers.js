@@ -19,8 +19,8 @@ function load_floor() {
 
 // Reseta sempre no frame 120, voltando pro 1
 function frame_rate() {
+    frame %= 65;
     frame++;
-    frame %= 120;
 }
 
 
@@ -52,4 +52,11 @@ function update_fb_sprite() {
 
         flappy_bird.sprite_xy = fb_states[fb_sprite_state];
     }
+}
+
+
+function random(min, max) {
+    return Math.floor(
+        (Math.random() * (max - min)) + min
+    );
 }
