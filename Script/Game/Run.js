@@ -1,7 +1,7 @@
 function update_game() {
-    frame_rate();
-
     if(!paused) {
+        frame_rate();
+
         load_background();
         load_floor();
 
@@ -23,8 +23,8 @@ update_game();
 
 root.onclick = () => secs.current.click();
 
-window.onkeydown = (e) => {
-    switch(e.code) {
+window.onkeydown = k => {
+    switch(k.code) {
         case "Space":
             secs.current.click();
             break;

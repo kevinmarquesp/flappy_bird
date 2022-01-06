@@ -17,24 +17,17 @@ function load_floor() {
 }
 
 
-// Reseta sempre no frame 120, voltando pro 1
-function frame_rate() {
-    frame %= 65;
-    frame++;
-}
-
-
 function load_background() {
     ctx.fillStyle = "#70c5ce";
     ctx.fillRect(0, 0, root.width, root.height);
 
     // Reseta o valor de X para o lado esquerdo da tela
-    background.root_xy[0] = 0;
     background.render();
+    background.root_xy[0] = background.size_wh[0];
 
     // Desenha outro sprite, mas do lado da primeiro sprite
-    background.root_xy[0] = background.size_wh[0];
     background.render();
+    background.root_xy[0] = 0;
 }
 
 
@@ -55,8 +48,27 @@ function update_fb_sprite() {
 }
 
 
+function add_text(str, root_xy, align) {
+    ctx.font = "bold 10px monospace";
+    ctx.fillStyle = "white";
+    ctx.textAlign = align;
+
+    ctx.fillText(str, ...root_xy);
+}
+
+
+// Faz o sprite do player ir e voltar na lista de sprites...
 function random(min, max) {
     return Math.floor(
         (Math.random() * (max - min)) + min
     );
 }
+
+
+// Reseta sempre no frame 65, voltando pro 1
+function frame_rate() {
+    frame %= 65;
+    frame++;
+}
+
+

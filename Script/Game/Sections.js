@@ -3,6 +3,7 @@ class Section {
         this.current;
 
         this._pipe_arr = new Array();
+        this._score = this._best = 0;
     }
 
 
@@ -10,7 +11,8 @@ class Section {
     list() {
         return {
             get_ready_sec: this._get_ready_sec(),
-            game_sec: this._game_sec()
+            game_sec: this._game_sec(),
+            game_over_sec: this._game_over_sec()
         };
     }
 
@@ -25,7 +27,7 @@ class Section {
         const floor_top = floor.root_xy[1];
 
         if(fb_bottom > floor_top || fb_top < sky) {
-            this.current = this.list().get_ready_sec;
+            this.current = this.list().game_over_sec;
         }
     }
 
@@ -88,8 +90,47 @@ class Section {
 
         // Se ele estiver nos dois, significa que o player colidiu com o cano!
         if(x_area && y_area) {
-            this.current = this.list().get_ready_sec;
-            this._pipe_arr = new Array();
+            this.current = this.list().game_over_sec;
+        }
+    }
+
+
+    // Verifica se o cano colidiu e tira ele do this._pipe_arr quando sair da tela...
+    _update_pipe_arr() {
+        this._pipe_arr.forEach(e => {
+            const pipe_front = e.root_xy[0] + e.size_wh[0];
+
+            this._pipe_colision(e);
+
+            if(pipe_front < 0) {
+                if(e.root_xy[1] < 0) {
+                    this._score++;
+                }
+
+                this._pipe_arr.shift();
+            }
+        });
+    }
+
+
+    // Seleciona um sprite para medalha com base na pontuação e no bestscore :D
+    _update_medal() {
+        const empty = [0, 78];
+        const bronze = [48, 124];
+        const silver = [48, 78];
+        const gold = [0, 124];
+
+        if(this._score < 10) {
+            return empty;
+
+        } else if(this._score >= this._best) {
+            return gold;
+
+        } else if(this._score > this._best / 2) {
+            return silver;
+
+        } else if(this._score >= 10) {
+            return bronze;
         }
     }
 
@@ -132,28 +173,24 @@ class Section {
         return {
             update: () => {
                 flappy_bird.mv_xy[1] += gravity;
+
                 this._floor_sky_colision();
                 this._spawn_pipes();
-
-                // Verifica se o cano colidiu e tira ele do this._pipe_arr quando sair da tela...
-                this._pipe_arr.forEach(e => {
-                    const pipe_front = e.root_xy[0] + e.size_wh[0];
-
-                    this._pipe_colision(e);
-
-                    if(pipe_front < 0) {
-                        this._pipe_arr.shift();
-                    }
-                });
+                this._update_pipe_arr();
             },
 
             // Carrega o flappybird e todos os canos na tela
             load: () => {
                 flappy_bird.render();
-
                 this._pipe_arr.forEach(e => {
                     e.render();
                 });
+
+                // Escreve a pontuação do player no canto
+                add_text(
+                    `Score: ${this._score}`,
+                    [10, 20], "left"
+                );
             },
 
             click: () => {
@@ -164,18 +201,60 @@ class Section {
 
 
     _game_over_sec() {
+        const medal = new Sprite(
+            [0, 78],    // A medalha padrão eh nenhuma...
+            [44, 44],
+            [63, 137]
+        );
+
+        const game_over = new Sprite(
+            [134, 152],
+            [226, 201],
+            [null, 50]
+        );
+
+        // Centraliza a tela de game_over no meio do canvas
+        game_over.root_xy[0] =
+            (root.width / 2) - (game_over.size_wh[0] / 2) - 10;
+
         return {
             update: () => {
-                return;
+                // Se o score atual for maior, ele será o valor do bestscore
+                this._best =
+                    this._score > this._best ? this._score : this._best;
+
+                // Retorna as coordenadas da medalha referente a pontuação e o bestscore
+                medal.sprite_xy = this._update_medal();
+
+                // Faz o player e os canos ficarem parados na tela...
+                flappy_bird.mv_xy[1] = 0;
+                this._pipe_arr.forEach(e => {
+                    e.mv_xy[0] = 0;
+                });
             },
 
             load: () => {
-                return;
+                flappy_bird.render();
+                this._pipe_arr.forEach(e => {
+                    e.render();
+                });
+
+                game_over.render();
+                medal.render();
+
+                add_text(this._score, [240, 140], "right");
+                add_text(this._best, [240, 180], "right");
             },
 
             click: () => {
-                return;
+                this._pipe_arr = new Array();
+                this._score = 0;
+
+                this.current = this.list().get_ready_sec;
             }
         };
     }
 }
+
+
+

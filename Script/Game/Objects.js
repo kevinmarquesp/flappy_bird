@@ -4,17 +4,22 @@ const ctx =  root.getContext("2d");
 const sprite_table = new Image();
 sprite_table.src = "Assets/sprites.png";
 
+// Coordenadas de cada sprite diferente do flappybird
+const fb_states = [[0, 0], [0, 26], [0, 52]];
 
-// [ Classe para criar os sprites de carregaá-los na tela ]
+let paused = false;
+let fb_sprite_state = fb_next_state = 0;
+let frame = 0;
 
+
+// Classe para criar os sprites de carregaá-los na tela
 class Sprite {
     constructor(sprite_xy, size_wh, root_xy, mv_xy = [0, 0]) {
         this.sprite_xy = sprite_xy;
         this.size_wh = size_wh;
         this.root_xy = root_xy;
 
-        // Movimento do sprite
-        this.mv_xy = mv_xy;
+        this.mv_xy = mv_xy; // Controla o movimento X e Y do sprite
     }
 
 
@@ -33,40 +38,28 @@ class Sprite {
 }
 
 
-// [ Configurações do jogo ]
-
-let paused = false;
-let fb_sprite_state = fb_next_state = 0;
-let frame = 0;
-
-// Coordenadas de cada sprite diferente do flappybird
-const fb_states = [
-    [0, 0], [0, 26], [0, 52]
-];
-
-
-// [ Informações de cada sprite ]
-
 const background = new Sprite(
     [390, 0],
     [275, 204],
-    [null, null]
+    [0, undefined]
 );
 
 const floor = new Sprite(
     [0, 610],
     [224, 112],
-    [0, null],
+    [0, undefined],
     [-1, 0]
 );
-
-background.root_xy[1] = root.height - background.size_wh[1]; // Altura do fundo...
-floor.root_xy[1] = root.height - floor.size_wh[1];  // Altura do chão...
 
 const flappy_bird = new Sprite(
     fb_states[0],
     [33, 24],
     [25, 50]
 );
+
+
+// Essa parte preenche os undefined
+background.root_xy[1] = root.height - background.size_wh[1];    // Altura do fundo...
+floor.root_xy[1] = root.height - floor.size_wh[1];              // Altura do chão...
 
 
