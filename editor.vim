@@ -41,15 +41,15 @@ setlocal fdi=#
 setlocal fdl=0
 setlocal fml=1
 setlocal fdn=20
-setlocal nofen
+setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 3 - ((2 * winheight(0) + 33) / 66)
+let s:l = 48 - ((47 * winheight(0) + 33) / 66)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 3
-normal! 09|
+keepjumps 48
+normal! 0
 wincmd w
 argglobal
 if bufexists("Script/Game/Sections.js") | buffer Script/Game/Sections.js | else | edit Script/Game/Sections.js | endif
@@ -72,32 +72,44 @@ silent! normal! zE
 75,80fold
 65,95fold
 65,95fold
-99,113fold
-117,135fold
-140,166fold
-169,200fold
-203,256fold
-203,256fold
+99,105fold
+109,123fold
+127,145fold
+150,176fold
+179,210fold
+213,261fold
+213,261fold
 let &fdl = &fdl
 22
 normal! zc
 35
 normal! zc
+65
+normal! zo
+65
+normal! zo
+65
+normal! zc
 99
 normal! zc
-117
+109
 normal! zc
-169
+127
 normal! zc
-203
+150
+normal! zc
+179
+normal! zc
+213
 normal! zo
-let s:l = 158 - ((148 * winheight(0) + 33) / 66)
+let s:l = 98 - ((86 * winheight(0) + 33) / 66)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 158
-normal! 0
+keepjumps 98
+normal! 076|
 wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 141 + 141) / 283)
 exe 'vert 2resize ' . ((&columns * 141 + 141) / 283)
 tabnext
@@ -133,12 +145,12 @@ setlocal fen
 silent! normal! zE
 16,38fold
 let &fdl = &fdl
-let s:l = 32 - ((31 * winheight(0) + 33) / 66)
+let s:l = 65 - ((64 * winheight(0) + 33) / 66)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 32
-normal! 01|
+keepjumps 65
+normal! 0
 wincmd w
 argglobal
 if bufexists("Script/Game/Helpers.js") | buffer Script/Game/Helpers.js | else | edit Script/Game/Helpers.js | endif
@@ -168,11 +180,11 @@ normal! 0
 wincmd w
 exe 'vert 1resize ' . ((&columns * 141 + 141) / 283)
 exe 'vert 2resize ' . ((&columns * 141 + 141) / 283)
-tabnext 2
-badd +26 Script/Game/Run.js
+tabnext 1
+badd +40 Script/Game/Run.js
 badd +1 index.html
-badd +60 Script/Game/Objects.js
-badd +161 Script/Game/Sections.js
+badd +1 Script/Game/Objects.js
+badd +23 Script/Game/Sections.js
 badd +71 Script/Game/Helpers.js
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

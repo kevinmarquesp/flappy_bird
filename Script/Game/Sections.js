@@ -3,7 +3,7 @@ class Section {
         this.current;
 
         this._pipe_arr = new Array();
-        this._score = this._best = 0;
+        this._score = this.best_score = 0;
     }
 
 
@@ -27,7 +27,7 @@ class Section {
         const floor_top = floor.root_xy[1];
 
         if(fb_bottom > floor_top || fb_top < sky) {
-            this.current = this.list().game_over_sec;
+            this._lose_the_game();
         }
     }
 
@@ -68,7 +68,7 @@ class Section {
             top: flappy_bird.root_xy[1] +4,
             front: flappy_bird.root_xy[0] + flappy_bird.size_wh[0] -4,
             bottom: flappy_bird.root_xy[1] + flappy_bird.size_wh[1] -4,
-            back: flappy_bird.root_xy[0] +4
+            back: flappy_bird.root_xy[0] +6
         };
 
         // Anatomia dos canos
@@ -90,8 +90,18 @@ class Section {
 
         // Se ele estiver nos dois, significa que o player colidiu com o cano!
         if(x_area && y_area) {
-            this.current = this.list().game_over_sec;
+            this._lose_the_game();
         }
+    }
+
+
+    // Salva o best_score no armazenamento local e troca sessão para a tela de game over...
+    _lose_the_game() {
+        this.best_score =
+            this._score > this.best_score ? this._score : this.best_score;
+
+        localStorage.setItem("best_score", JSON.stringify(this.best_score));
+        this.current = this.list().game_over_sec;
     }
 
 
@@ -123,10 +133,10 @@ class Section {
         if(this._score < 10) {
             return empty;
 
-        } else if(this._score >= this._best) {
+        } else if(this._score >= this.best_score) {
             return gold;
 
-        } else if(this._score > this._best / 2) {
+        } else if(this._score > this.best_score / 2) {
             return silver;
 
         } else if(this._score >= 10) {
@@ -219,11 +229,6 @@ class Section {
 
         return {
             update: () => {
-                // Se o score atual for maior, ele será o valor do bestscore
-                this._best =
-                    this._score > this._best ? this._score : this._best;
-
-                // Retorna as coordenadas da medalha referente a pontuação e o bestscore
                 medal.sprite_xy = this._update_medal();
 
                 // Faz o player e os canos ficarem parados na tela...
@@ -243,7 +248,7 @@ class Section {
                 medal.render();
 
                 add_text(this._score, [240, 140], "right");
-                add_text(this._best, [240, 180], "right");
+                add_text(this.best_score, [240, 180], "right");
             },
 
             click: () => {
@@ -255,6 +260,5 @@ class Section {
         };
     }
 }
-
 
 
